@@ -20,11 +20,11 @@ export default validate(merge(baseConfig, {
   entry: [
     `webpack-hot-middleware/client?path=http://localhost:${port}/__webpack_hmr`,
     'babel-polyfill',
-    './app/index'
+    './app/index',
   ],
 
   output: {
-    publicPath: `http://localhost:${port}/dist/`
+    publicPath: `http://localhost:${port}/dist/`,
   },
 
   module: {
@@ -40,16 +40,16 @@ export default validate(merge(baseConfig, {
         test: /\.global\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?sourceMap'
-        ]
+          'css-loader?sourceMap',
+        ],
       },
 
       {
         test: /^((?!\.global).)*\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-        ]
+          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        ],
       },
 
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
@@ -57,11 +57,16 @@ export default validate(merge(baseConfig, {
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
-    ]
+      {
+        test: /\.png$/,
+        loader: 'url-loader',
+        query: { mimetype: 'image/png' },
+      },
+    ],
   },
 
   eslint: {
-    formatter
+    formatter,
   },
 
   plugins: [
@@ -74,10 +79,10 @@ export default validate(merge(baseConfig, {
 
     // NODE_ENV should be production so that modules do not perform certain development checks
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
   ],
 
   // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
-  target: 'electron-renderer'
+  target: 'electron-renderer',
 }));

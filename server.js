@@ -22,15 +22,15 @@ const PORT = process.env.PORT || 3000;
 const wdm = webpackDevMiddleware(compiler, {
   publicPath: config.output.publicPath,
   stats: {
-    colors: true
-  }
+    colors: true,
+  },
 });
 
 app.use(wdm);
 
 app.use(webpackHotMiddleware(compiler));
 
-const server = app.listen(PORT, 'localhost', serverError => {
+const server = app.listen(PORT, 'localhost', (serverError) => {
   if (serverError) {
     return console.error(serverError);
   }
@@ -41,7 +41,7 @@ const server = app.listen(PORT, 'localhost', serverError => {
       .on('error', spawnError => console.error(spawnError));
   }
 
-  console.log(`Listening at http://localhost:${PORT}`);
+  return console.log(`Listening at http://localhost:${PORT}`);
 });
 
 process.on('SIGTERM', () => {

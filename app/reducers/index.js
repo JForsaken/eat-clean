@@ -5,7 +5,7 @@ import counter from './counter';
 
 const rootReducer = combineReducers({
   counter,
-  routing
+  routing,
 });
 
 export default rootReducer;

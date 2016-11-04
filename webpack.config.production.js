@@ -15,12 +15,12 @@ const config = validate(merge(baseConfig, {
 
   entry: [
     'babel-polyfill',
-    './app/index'
+    './app/index',
   ],
 
   output: {
     path: path.join(__dirname, 'app/dist'),
-    publicPath: '../dist/'
+    publicPath: '../dist/',
   },
 
   module: {
@@ -31,7 +31,7 @@ const config = validate(merge(baseConfig, {
         loader: ExtractTextPlugin.extract(
           'style-loader',
           'css-loader'
-        )
+        ),
       },
 
       // Pipe other styles through css modules and apend to style.css
@@ -40,7 +40,7 @@ const config = validate(merge(baseConfig, {
         loader: ExtractTextPlugin.extract(
           'style-loader',
           'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-        )
+        ),
       },
 
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
@@ -48,7 +48,7 @@ const config = validate(merge(baseConfig, {
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
-    ]
+    ],
   },
 
   plugins: [
@@ -58,26 +58,26 @@ const config = validate(merge(baseConfig, {
 
     // NODE_ENV should be production so that modules do not perform certain development checks
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
 
     // Minify without warning messages and IE8 support
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         screw_ie8: true,
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     new ExtractTextPlugin('style.css', { allChunks: true }),
     new HtmlWebpackPlugin({
       filename: '../app.html',
       template: 'app/app.html',
-      inject: false
-    })
+      inject: false,
+    }),
   ],
 
   // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
-  target: 'electron-renderer'
+  target: 'electron-renderer',
 }));
 
 export default config;

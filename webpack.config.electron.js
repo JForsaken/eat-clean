@@ -15,15 +15,15 @@ export default validate(merge(baseConfig, {
   // 'main.js' in root
   output: {
     path: __dirname,
-    filename: './app/main.js'
+    filename: './app/main.js',
   },
 
   plugins: [
     // Minify the output
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     // Add source map support for stack traces in node
     // https://github.com/evanw/node-source-map-support
@@ -33,9 +33,9 @@ export default validate(merge(baseConfig, {
     // ),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    })
+        NODE_ENV: JSON.stringify('production'),
+      },
+    }),
   ],
 
   /**
@@ -51,10 +51,10 @@ export default validate(merge(baseConfig, {
    */
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 
   externals: [
     // 'source-map-support'
-  ]
+  ],
 }));

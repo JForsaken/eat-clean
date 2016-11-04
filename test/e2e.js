@@ -22,6 +22,7 @@ describe('main window', function spec() {
     if (this.app && this.app.isRunning()) {
       return this.app.stop();
     }
+    return false;
   });
 
   const findCounter = () => this.app.client.element(`.${counterStyles.counter}`);
