@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import styles from './Counter.css';
+import styles from './Game.css';
 import zangief from '../../resources/images/zangief.png';
 import shapeDetector from '../utils/shapeDetector';
 
@@ -33,7 +33,8 @@ class Counter extends Component {
     super(props);
     this.state = {
       isMouseDown: false,
-      stroke: [],
+      strokes: [],
+      pattern: '',
     };
 
     this.mouseUp = this.mouseUp.bind(this);
@@ -41,7 +42,7 @@ class Counter extends Component {
     this.mouseMove = this.mouseMove.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     window.addEventListener('mousedown', this.mouseDown, false);
     window.addEventListener('mouseup', this.mouseUp, false);
     window.addEventListener('mousemove', this.mouseMove, false);
@@ -59,20 +60,23 @@ class Counter extends Component {
   }
 
   mouseUp() {
-    console.log(JSON.stringify(this.state.stroke));
-    console.log(detector.spot(this.state.stroke));
+    if (this.state.strokes) {
+      this.setState({ pattern: detector.spot(this.state.strokes).pattern });
+      console.log(this.state.strokes);
+      console.log(detector.spot(this.state.strokes));
+    }
     this.setState({
       isMouseDown: false,
-      stroke: [],
+      strokes: [],
     });
   }
 
   mouseMove(e) {
-    const { stroke, isMouseDown } = this.state;
+    const { strokes, isMouseDown } = this.state;
 
     if (isMouseDown) {
-      stroke.push({x: e.clientX, y: e.clientY });
-      this.setState({ stroke });
+      strokes.push({x: e.clientX, y: e.clientY });
+      this.setState({ strokes });
     }
   }
 
@@ -84,6 +88,9 @@ class Counter extends Component {
           <Link to="/">
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
+        </div>
+        <div className={`counter ${styles.counter}`}>
+          {this.state.pattern}
         </div>
         <div style={mainCharacter} />
       </div>
