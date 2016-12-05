@@ -2,16 +2,21 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Game from '../components/Game';
-import * as CounterActions from '../actions/counter';
+import * as MonsterActions from '../actions/monster';
+import * as PlayerActions from '../actions/player';
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter,
+    monster: state.monster,
+    player: state.player,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(CounterActions, dispatch);
+  const m = bindActionCreators(MonsterActions, dispatch);
+  const p = bindActionCreators(PlayerActions, dispatch);
+
+  return Object.assign({}, m, p);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

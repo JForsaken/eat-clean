@@ -1,5 +1,5 @@
-// @flow
 import React, { Component, PropTypes } from 'react';
+import R from 'ramda';
 import { Link } from 'react-router';
 
 import Player from './Player';
@@ -11,11 +11,11 @@ const detector = new shapeDetector(shapeDetector.defaultShapes);
 
 class Counter extends Component {
   static propTypes = {
-    increment: PropTypes.func.isRequired,
-    incrementIfOdd: PropTypes.func.isRequired,
-    incrementAsync: PropTypes.func.isRequired,
-    decrement: PropTypes.func.isRequired,
-    counter: PropTypes.number.isRequired,
+    killMonster: PropTypes.func.isRequired,
+    updateLife: PropTypes.func.isRequired,
+    updateLevel: PropTypes.func.isRequired,
+    monster: PropTypes.object.isRequired,
+    player: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -31,12 +31,19 @@ class Counter extends Component {
     this.mouseMove = this.mouseMove.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!R.equals(this.props.monster, nextProps.monster)) {
+      if (nextProps.monster.attacked) {
+        this.props.updateLife(this.props.player.life - 1);
+      }
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('mousedown', this.mouseDown, false);
     window.addEventListener('mouseup', this.mouseUp, false);
     window.addEventListener('mousemove', this.mouseMove, false);
   }
-
 
   componentWillUnmount() {
     window.removeEventListener('mousedown', this.mouseDown, false);
@@ -70,7 +77,7 @@ class Counter extends Component {
   }
 
   render() {
-    const { increment, incrementIfOdd, incrementAsync, decrement, counter } = this.props;
+    const { killMonster } = this.props;
     return (
       <div>
         <div className={styles.backButton}>
@@ -81,8 +88,8 @@ class Counter extends Component {
         <div className={`counter ${styles.counter}`}>
           {this.state.pattern}
         </div>
-        <Player />
-        <MonsterFactory />
+        <Player life={this.props.player.life} />
+        <MonsterFactory killMonster={killMonster} />
       </div>
     );
   }
