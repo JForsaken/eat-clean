@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 
 import monsterSprite from '../../resources/images/monster.gif';
@@ -23,6 +24,7 @@ const symbols = {
 class Monster extends Component {
   static propTypes = {
     killMonster: PropTypes.func.isRequired,
+    gestures: PropTypes.shape().isRequired,
     monsterId: PropTypes.number.isRequired,
   };
 
@@ -85,8 +87,23 @@ class Monster extends Component {
     });
   }
 
+  isDead() {
+    const { gestures } = this.props;
+
+    if (!gestures || gestures.length < 2) {
+      return false;
+    }
+
+    return gestures[gestures.length - 1] === 'caret' && gestures[gestures.length - 2] === 'square';
+  }
+
   render() {
     if (!this.state.visible) {
+      return null;
+    }
+
+    if (this.isDead()) {
+      clearInterval(this.state.intervalId);
       return null;
     }
 
@@ -103,7 +120,7 @@ class Monster extends Component {
         >
           <div style={monster}>
             <div style={symbols}>
-              □○
+              □^
             </div>
           </div>
         </Draggable>
@@ -112,4 +129,12 @@ class Monster extends Component {
   }
 }
 
-export default Monster;
+const mapStateToProps = (state) => {
+  console.log('WHOPELAYE');
+
+  return {
+    gestures: state.player.gestures,
+  };
+};
+
+export default connect(mapStateToProps)(Monster);

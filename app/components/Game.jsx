@@ -12,6 +12,7 @@ const detector = new ShapeDetector(ShapeDetector.defaultShapes);
 
 class Counter extends Component {
   static propTypes = {
+    addGesture: PropTypes.func.isRequired,
     killMonster: PropTypes.func.isRequired,
     updateLife: PropTypes.func.isRequired,
     monster: PropTypes.object.isRequired,
@@ -63,7 +64,7 @@ class Counter extends Component {
       // pattern must be almost certain to be true
       if (detectedPattern.score >= 0.8) {
         this.setState({ lastPattern: detectedPattern.pattern });
-        // detector.spot(this.strokes); <-- push this to player.patterns redux store
+        this.props.addGesture(detector.spot(this.strokes));
       }
     }
 

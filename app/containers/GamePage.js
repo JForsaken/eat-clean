@@ -16,7 +16,10 @@ function mapDispatchToProps(dispatch) {
   const m = bindActionCreators(MonsterActions, dispatch);
   const p = bindActionCreators(PlayerActions, dispatch);
 
-  return Object.assign({}, m, p);
+  return {
+    ...m,
+    ...p,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

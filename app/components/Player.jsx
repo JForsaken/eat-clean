@@ -34,6 +34,7 @@ class Player extends Component {
       },
     });
   }
+
   render() {
     let life = '';
     for (let i = 1; i <= this.props.life; i += 1) {

@@ -1,6 +1,20 @@
-import { UPDATE_LIFE, UPDATE_LEVEL } from '../actions/player';
+import {
+  ADD_GESTURE,
+  UPDATE_LIFE,
+  UPDATE_LEVEL,
+} from '../actions/player';
 
-export default function player(state: player = { life: 3, level: 1 }, action: Object) {
+function addGestureToState(state, gesture) {
+  const gestures = state.gestures;
+  gestures.push(gesture);
+
+  return {
+    ...state,
+    gestures,
+  };
+}
+
+export default function player(state: player = { life: 3, level: 1, gestures: [] }, action: Object) {
   switch (action.type) {
     case UPDATE_LIFE:
       return {
@@ -12,6 +26,8 @@ export default function player(state: player = { life: 3, level: 1 }, action: Ob
         ...state,
         level: action.level,
       };
+    case ADD_GESTURE:
+      return addGestureToState(state, action.gesture);
     default:
       return state;
   }
