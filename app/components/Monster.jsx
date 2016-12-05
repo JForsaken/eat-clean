@@ -6,7 +6,7 @@ import monsterSprite from '../../resources/images/monster.gif';
 const { BrowserWindow } = require('electron').remote;
 
 const monster = {
-  position: 'relative',
+  position: 'absolute',
   backgroundImage: `url(${monsterSprite})`,
   height: 125,
   width: '100%',
@@ -37,14 +37,14 @@ class Monster extends Component {
 
   componentWillMount() {
     const position = BrowserWindow.getFocusedWindow().getSize();
-    const offset = 100;
+    const offset = 0;
     this.orientation.x = Math.floor(Math.random() * ((1 - 0) + 1)) + 0 === 0 ? 'LEFT' : 'RIGHT';
     this.orientation.y = Math.floor(Math.random() * ((1 - 0) + 1)) + 0 === 0 ? 'UP' : 'DOWN';
 
     const y = Math.floor(Math.random() * ((position[1] - 0) + position[1])) + 0;
     this.orientation.y = y >= position[1] / 2 ? 'DOWN' : 'UP';
 
-    const id = setInterval(() => this.move(), 30);
+    const id = setInterval(() => this.move(), 50);
 
     this.setState({
       position: {
@@ -63,15 +63,15 @@ class Monster extends Component {
 
   move() {
     const { position } = this.state;
-    const speed = 3;
+    const speed = 5;
     const screenSize = BrowserWindow.getFocusedWindow().getSize();
     const middle = {
       x: (screenSize[0] / 2) - 40,
-      y: (screenSize[1] / 2) - 220,
+      y: (screenSize[1] / 2) - 40,
     };
     const rotation = Math.atan2(middle.y - position.y, middle.x - position.x);
 
-    if (Math.sqrt(((position.x - middle.x) ** 2) + ((position.y - middle.y) ** 2)) < 2) {
+    if (Math.abs(position.x - middle.x) < 5 && Math.abs(position.y - middle.y) < 5) {
       this.props.killMonster(this.props.monsterId, true);
       clearInterval(this.state.intervalId);
       this.setState({ visible: false });
@@ -92,21 +92,23 @@ class Monster extends Component {
     }
 
     return (
-      <Draggable
-        disabled
-        position={this.state.position}
-        grid={[25, 25]}
-        zIndex={100}
-        onStart={this.handleStart}
-        onDrag={this.handleDrag}
-        onStop={this.handleStop}
-      >
-        <div style={monster}>
-          <div style={symbols}>
-            □○
+      <div style={{ position: 'relative' }}>
+        <Draggable
+          disabled
+          position={this.state.position}
+          zIndex={220}
+          onStart={this.handleStart}
+          onDrag={this.handleDrag}
+          onStop={this.handleStop}
+          handle={`.monster${this.props.monsterId}handle`}
+        >
+          <div style={monster}>
+            <div style={symbols}>
+              □○
+            </div>
           </div>
-        </div>
-      </Draggable>
+        </Draggable>
+      </div>
     );
   }
 }

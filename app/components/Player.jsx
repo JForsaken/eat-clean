@@ -6,7 +6,7 @@ import zangief from '../../resources/images/zangief.png';
 const { BrowserWindow } = require('electron').remote;
 
 const mainCharacter = {
-  position: 'relative',
+  position: 'absolute',
   backgroundImage: `url(${zangief})`,
   height: 200,
   width: '100%',

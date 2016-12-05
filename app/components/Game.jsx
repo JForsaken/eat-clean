@@ -88,7 +88,7 @@ class Counter extends Component {
           {this.state.pattern}
         </div>
         <Player life={this.props.player.life} />
-        <MonsterFactory killMonster={killMonster} />
+        <MonsterFactory killMonster={killMonster} level={this.props.player.level} />
       </div>
     );
   }
