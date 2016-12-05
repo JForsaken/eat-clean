@@ -5,15 +5,14 @@ import { Link } from 'react-router';
 import Player from './Player';
 import MonsterFactory from './MonsterFactory';
 import styles from './Game.css';
-import shapeDetector from '../utils/shapeDetector';
+import ShapeDetector from '../utils/shapeDetector';
 
-const detector = new shapeDetector(shapeDetector.defaultShapes);
+const detector = new ShapeDetector(ShapeDetector.defaultShapes);
 
 class Counter extends Component {
   static propTypes = {
     killMonster: PropTypes.func.isRequired,
     updateLife: PropTypes.func.isRequired,
-    updateLevel: PropTypes.func.isRequired,
     monster: PropTypes.object.isRequired,
     player: PropTypes.object.isRequired,
   };
@@ -31,18 +30,18 @@ class Counter extends Component {
     this.mouseMove = this.mouseMove.bind(this);
   }
 
+  componentDidMount() {
+    window.addEventListener('mousedown', this.mouseDown, false);
+    window.addEventListener('mouseup', this.mouseUp, false);
+    window.addEventListener('mousemove', this.mouseMove, false);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!R.equals(this.props.monster, nextProps.monster)) {
       if (nextProps.monster.attacked) {
         this.props.updateLife(this.props.player.life - 1);
       }
     }
-  }
-
-  componentDidMount() {
-    window.addEventListener('mousedown', this.mouseDown, false);
-    window.addEventListener('mouseup', this.mouseUp, false);
-    window.addEventListener('mousemove', this.mouseMove, false);
   }
 
   componentWillUnmount() {
@@ -71,7 +70,7 @@ class Counter extends Component {
     const { strokes, isMouseDown } = this.state;
 
     if (isMouseDown) {
-      strokes.push({x: e.clientX, y: e.clientY });
+      strokes.push({ x: e.clientX, y: e.clientY });
       this.setState({ strokes });
     }
   }
