@@ -62,6 +62,11 @@ export default validate(merge(baseConfig, {
         loader: 'url-loader',
         query: { mimetype: 'image/png' },
       },
+      {
+        test: /\.gif$/,
+        loader: 'url-loader',
+        query: { mimetype: 'image/gif' },
+      },
     ],
   },
 

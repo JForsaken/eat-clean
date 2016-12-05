@@ -1,24 +1,13 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+
+import Player from './Player';
+import MonsterFactory from './MonsterFactory';
 import styles from './Game.css';
-import zangief from '../../resources/images/zangief.png';
 import shapeDetector from '../utils/shapeDetector';
 
 const detector = new shapeDetector(shapeDetector.defaultShapes);
-
-const mainCharacter = {
-  position: 'absolute',
-  top: '32%',
-  backgroundImage: `url(${zangief})`,
-  overflow: 'hidden',
-  display: 'inline-block',
-  height: 200,
-  width: '100%',
-  backgroundSize: 'contain',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-};
 
 class Counter extends Component {
   static propTypes = {
@@ -92,7 +81,8 @@ class Counter extends Component {
         <div className={`counter ${styles.counter}`}>
           {this.state.pattern}
         </div>
-        <div style={mainCharacter} />
+        <Player />
+        <MonsterFactory />
       </div>
     );
   }
