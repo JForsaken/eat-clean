@@ -71,7 +71,7 @@ class Monster extends Component {
     };
     const rotation = Math.atan2(middle.y - position.y, middle.x - position.x);
 
-    if (Math.sqrt(((position.x - middle.x) ** 2) + ((position.y - middle.y) ** 2)) < 5) {
+    if (Math.sqrt(((position.x - middle.x) ** 2) + ((position.y - middle.y) ** 2)) < 2) {
       this.props.killMonster(this.props.monsterId, true);
       clearInterval(this.state.intervalId);
       this.setState({ visible: false });

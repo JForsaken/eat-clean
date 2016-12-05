@@ -8,7 +8,17 @@ class MonsterFactory extends Component {
   };
 
   render() {
-    return <Monster killMonster={this.props.killMonster} monsterId={1} />;
+    const monsters = [];
+    for (let i = 1; i <= 1; i += 1) {
+      monsters.push(
+        <Monster key={`monster${i}`} killMonster={this.props.killMonster} monsterId={i} />
+      );
+    }
+    return (
+      <div>
+        {monsters}
+      </div>
+    );
   }
 }
 
