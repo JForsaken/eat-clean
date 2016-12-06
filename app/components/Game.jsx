@@ -3,6 +3,7 @@ import R from 'ramda';
 import { Link } from 'react-router';
 
 import Player from './Player';
+import Hud from './Hud';
 import MonsterFactory from './MonsterFactory';
 import styles from './Game.css';
 import ShapeDetector from '../utils/shapeDetector';
@@ -19,10 +20,11 @@ class Counter extends Component {
 
   constructor(props) {
     super(props);
+    this.isMouseDown = false;
+    this.strokes = [];
+
     this.state = {
-      isMouseDown: false,
-      strokes: [],
-      pattern: '',
+      lastPattern: '',
     };
 
     this.mouseUp = this.mouseUp.bind(this);
@@ -51,27 +53,27 @@ class Counter extends Component {
   }
 
   mouseDown() {
-    this.setState({ isMouseDown: true });
+    this.isMouseDown = true;
   }
 
   mouseUp() {
-    if (this.state.strokes) {
-      this.setState({ pattern: detector.spot(this.state.strokes).pattern });
-      console.log(this.state.strokes);
-      console.log(detector.spot(this.state.strokes));
+    if (!R.isEmpty(this.strokes)) {
+      const detectedPattern = detector.spot(this.strokes);
+
+      // pattern must be almost certain to be true
+      if (detectedPattern.score >= 0.8) {
+        this.setState({ lastPattern: detectedPattern.pattern });
+        // detector.spot(this.strokes); <-- push this to player.patterns redux store
+      }
     }
-    this.setState({
-      isMouseDown: false,
-      strokes: [],
-    });
+
+    this.isMouseDown = false;
+    this.strokes = [];
   }
 
   mouseMove(e) {
-    const { strokes, isMouseDown } = this.state;
-
-    if (isMouseDown) {
-      strokes.push({ x: e.clientX, y: e.clientY });
-      this.setState({ strokes });
+    if (this.isMouseDown) {
+      this.strokes.push({ x: e.clientX, y: e.clientY });
     }
   }
 
@@ -79,14 +81,15 @@ class Counter extends Component {
     const { killMonster } = this.props;
     return (
       <div>
+
         <div className={styles.backButton}>
           <Link to="/">
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
         </div>
-        <div className={`counter ${styles.counter}`}>
-          {this.state.pattern}
-        </div>
+
+        <Hud killedMonster={this.props.monster} lastPattern={this.state.lastPattern} />
+
         <Player life={this.props.player.life} />
         <MonsterFactory killMonster={killMonster} level={this.props.player.level} />
       </div>

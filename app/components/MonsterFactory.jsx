@@ -34,7 +34,7 @@ class MonsterFactory extends Component {
     for (let i = 1; i <= Math.ceil(this.props.level * 1.5); i += 1) {
       setTimeout(() => {
         this.spawn();
-      }, (1 / this.props.level) * this.getSpawnTime());
+      }, (1 / this.props.level) * MonsterFactory.getSpawnTime());
     }
   }
 

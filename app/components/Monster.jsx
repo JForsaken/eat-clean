@@ -54,7 +54,6 @@ class Monster extends Component {
       visible: true,
       intervalId: id,
     });
-    console.log(this.orientation);
   }
 
   componentWillUnmount() {
