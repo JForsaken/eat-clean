@@ -1,12 +1,12 @@
 // @flow
-export const ADD_GESTURE = 'ADD_GESTURE';
+export const ADD_PATTERN = 'ADD_PATTERN';
 export const UPDATE_LIFE = 'UPDATE_LIFE';
 export const UPDATE_LEVEL = 'UPDATE_LEVEL';
 
-export function addGesture(gesture) {
+export function addPattern(pattern) {
   return {
-    type: ADD_GESTURE,
-    gesture,
+    type: ADD_PATTERN,
+    pattern,
   };
 }
 

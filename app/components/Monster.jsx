@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
+import { equals, reduce } from 'ramda';
+
+import icons from '../constants/symbols';
 
 import monsterSprite from '../../resources/images/monster.gif';
 
@@ -24,8 +27,9 @@ const symbols = {
 class Monster extends Component {
   static propTypes = {
     killMonster: PropTypes.func.isRequired,
-    gestures: PropTypes.shape().isRequired,
     monsterId: PropTypes.number.isRequired,
+    patterns: PropTypes.arrayOf(PropTypes.string),
+    solution: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   constructor(props) {
@@ -62,6 +66,17 @@ class Monster extends Component {
     clearInterval(this.state.intervalId);
   }
 
+  getSolutionString(solution) {
+    return reduce((str, symbol) => `${str} ${icons[symbol]} `, '', solution);
+  }
+
+  isDead() {
+    const { patterns, solution } = this.props;
+
+    return patterns && patterns.length >= solution.length &&
+            equals(patterns.slice(patterns.length - solution.length, patterns.length), solution);
+  }
+
   move() {
     const { position } = this.state;
     const speed = 5;
@@ -78,23 +93,12 @@ class Monster extends Component {
       this.setState({ visible: false });
     }
 
-
     this.setState({
       position: {
         x: (position.x + (Math.cos(rotation) * speed)),
         y: (position.y + (Math.sin(rotation) * speed)),
       },
     });
-  }
-
-  isDead() {
-    const { gestures } = this.props;
-
-    if (!gestures || gestures.length < 2) {
-      return false;
-    }
-
-    return gestures[gestures.length - 1] === 'caret' && gestures[gestures.length - 2] === 'square';
   }
 
   render() {
@@ -104,6 +108,7 @@ class Monster extends Component {
 
     if (this.isDead()) {
       clearInterval(this.state.intervalId);
+      this.props.killMonster(this.props.monsterId, false);
       return null;
     }
 
@@ -120,7 +125,7 @@ class Monster extends Component {
         >
           <div style={monster}>
             <div style={symbols}>
-              □^
+              {this.getSolutionString(this.props.solution)}
             </div>
           </div>
         </Draggable>
@@ -129,12 +134,8 @@ class Monster extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log('WHOPELAYE');
-
-  return {
-    gestures: state.player.gestures,
-  };
-};
+const mapStateToProps = state => ({
+  patterns: state.player.drawnPatterns,
+});
 
 export default connect(mapStateToProps)(Monster);

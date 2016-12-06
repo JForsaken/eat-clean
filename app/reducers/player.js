@@ -1,20 +1,28 @@
+import { clone } from 'ramda';
+
 import {
-  ADD_GESTURE,
+  ADD_PATTERN,
   UPDATE_LIFE,
   UPDATE_LEVEL,
 } from '../actions/player';
 
-function addGestureToState(state, gesture) {
-  const gestures = state.gestures;
-  gestures.push(gesture);
+const initialState = {
+  life: 3,
+  level: 1,
+  drawnPatterns: [],
+};
+
+function addPatternToState(state, pattern) {
+  const drawnPatterns = clone(state.drawnPatterns);
+  drawnPatterns.push(pattern);
 
   return {
     ...state,
-    gestures,
+    drawnPatterns,
   };
 }
 
-export default function player(state: player = { life: 3, level: 1, gestures: [] }, action: Object) {
+export default function player(state: player = initialState, action: Object) {
   switch (action.type) {
     case UPDATE_LIFE:
       return {
@@ -26,8 +34,8 @@ export default function player(state: player = { life: 3, level: 1, gestures: []
         ...state,
         level: action.level,
       };
-    case ADD_GESTURE:
-      return addGestureToState(state, action.gesture);
+    case ADD_PATTERN:
+      return addPatternToState(state, action.pattern);
     default:
       return state;
   }

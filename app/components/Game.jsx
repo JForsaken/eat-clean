@@ -10,9 +10,9 @@ import ShapeDetector from '../utils/shapeDetector';
 
 const detector = new ShapeDetector(ShapeDetector.defaultShapes);
 
-class Counter extends Component {
+class Game extends Component {
   static propTypes = {
-    addGesture: PropTypes.func.isRequired,
+    addPattern: PropTypes.func.isRequired,
     killMonster: PropTypes.func.isRequired,
     updateLife: PropTypes.func.isRequired,
     monster: PropTypes.object.isRequired,
@@ -64,7 +64,7 @@ class Counter extends Component {
       // pattern must be almost certain to be true
       if (detectedPattern.score >= 0.8) {
         this.setState({ lastPattern: detectedPattern.pattern });
-        this.props.addGesture(detector.spot(this.strokes));
+        this.props.addPattern(detector.spot(this.strokes).pattern);
       }
     }
 
@@ -82,7 +82,6 @@ class Counter extends Component {
     const { killMonster } = this.props;
     return (
       <div>
-
         <div className={styles.backButton}>
           <Link to="/">
             <i className="fa fa-arrow-left fa-3x" />
@@ -98,4 +97,4 @@ class Counter extends Component {
   }
 }
 
-export default Counter;
+export default Game;
