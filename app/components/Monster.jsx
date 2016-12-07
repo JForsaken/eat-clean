@@ -62,6 +62,20 @@ class Monster extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!equals(nextProps.patterns, this.props.patterns)) {
+      if (this.isDead(nextProps.patterns)) {
+        clearInterval(this.state.intervalId);
+        this.props.killMonster(this.props.monsterId, false);
+      }
+    }
+
+    if (nextProps.monsterId === this.props.monsterId) {
+      clearInterval(this.state.intervalId);
+      this.setState({ visible: false });
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.state.intervalId);
   }
@@ -70,8 +84,8 @@ class Monster extends Component {
     return reduce((str, symbol) => `${str} ${icons[symbol]} `, '', solution);
   }
 
-  isDead() {
-    const { patterns, solution } = this.props;
+  isDead(patterns) {
+    const { solution } = this.props;
 
     return patterns && patterns.length >= solution.length &&
             equals(patterns.slice(patterns.length - solution.length, patterns.length), solution);
@@ -89,8 +103,6 @@ class Monster extends Component {
 
     if (Math.abs(position.x - middle.x) < 5 && Math.abs(position.y - middle.y) < 5) {
       this.props.killMonster(this.props.monsterId, true);
-      clearInterval(this.state.intervalId);
-      this.setState({ visible: false });
     }
 
     this.setState({
@@ -103,12 +115,6 @@ class Monster extends Component {
 
   render() {
     if (!this.state.visible) {
-      return null;
-    }
-
-    if (this.isDead()) {
-      clearInterval(this.state.intervalId);
-      this.props.killMonster(this.props.monsterId, false);
       return null;
     }
 
