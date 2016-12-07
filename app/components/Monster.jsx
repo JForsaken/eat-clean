@@ -28,6 +28,7 @@ class Monster extends Component {
   static propTypes = {
     killMonster: PropTypes.func.isRequired,
     monsterId: PropTypes.number.isRequired,
+    killedMonsterId: PropTypes.number,
     patterns: PropTypes.arrayOf(PropTypes.string),
     solution: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
@@ -63,16 +64,20 @@ class Monster extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // new pattern done
     if (!equals(nextProps.patterns, this.props.patterns)) {
       if (this.isDead(nextProps.patterns)) {
-        clearInterval(this.state.intervalId);
         this.props.killMonster(this.props.monsterId, false);
       }
     }
 
-    if (nextProps.monsterId === this.props.monsterId) {
-      clearInterval(this.state.intervalId);
-      this.setState({ visible: false });
+    // new monster death
+    if (nextProps.killedMonsterId !== this.props.killedMonsterId) {
+      // if current monster died
+      if (nextProps.killedMonsterId === this.props.monsterId) {
+        clearInterval(this.state.intervalId);
+        this.setState({ visible: false });
+      }
     }
   }
 
@@ -142,6 +147,7 @@ class Monster extends Component {
 
 const mapStateToProps = state => ({
   patterns: state.player.drawnPatterns,
+  killedMonsterId: state.monster.id,
 });
 
 export default connect(mapStateToProps)(Monster);
