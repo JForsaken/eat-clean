@@ -1,6 +1,14 @@
 // @flow
+export const ADD_PATTERN = 'ADD_PATTERN';
 export const UPDATE_LIFE = 'UPDATE_LIFE';
 export const UPDATE_LEVEL = 'UPDATE_LEVEL';
+
+export function addPattern(pattern) {
+  return {
+    type: ADD_PATTERN,
+    pattern,
+  };
+}
 
 export function updateLife(life) {
   return {

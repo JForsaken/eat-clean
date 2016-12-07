@@ -7,6 +7,7 @@
     "node": true
   },
   "rules": {
+    "class-methods-use-this": "off",
     "generator-star-spacing": "off",
     "import/no-unresolved": ["error", { "ignore": ["electron"] }],
     "import/no-extraneous-dependencies": "off",

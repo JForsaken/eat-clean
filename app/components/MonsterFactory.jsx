@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import Monster from './Monster';
+import symbols from '../constants/symbols';
 
 class MonsterFactory extends Component {
   static propTypes = {
@@ -30,6 +31,22 @@ class MonsterFactory extends Component {
     }
   }
 
+  getRandom(min, max) {
+    return Math.floor(Math.random() * ((max - min) + 1)) + min;
+  }
+
+  getSolution() {
+    const solution = [];
+    const amount = this.getRandom(1, 2);
+    const symbolNames = Object.keys(symbols);
+
+    while (solution.length < amount) {
+      solution.push(symbolNames[this.getRandom(0, symbolNames.length - 1)]);
+    }
+
+    return solution;
+  }
+
   spawnNewMonsters() {
     for (let i = 1; i <= Math.ceil(this.props.level * 1.5); i += 1) {
       setTimeout(() => {
@@ -45,6 +62,7 @@ class MonsterFactory extends Component {
         key={`monster${monsters.length}`}
         killMonster={this.props.killMonster}
         monsterId={monsters.length}
+        solution={this.getSolution()}
       />
     );
 
